@@ -1,0 +1,10 @@
+# Git detecta solo qué es texto y qué es binario
+* text=auto
+
+# Binarios (git no intenta compararlos línea a línea)
+*.fbx  binary
+*.png  binary
+*.jpg  binary
+*.wav  binary
+*.mp3  binary
+*.ogg  binary

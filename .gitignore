@@ -1,0 +1,42 @@
+# Carpetas que Unity regenera solo (no se suben)
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+
+# Archivos de Visual Studio / Rider que Unity genera
+.vs/
+.idea/
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Builds y paquetes
+*.apk
+*.aab
+*.unitypackage
+*.app
+crashlytics-buildid.txt
+sysinfo.txt
+
+# Capturas de pantalla de pruebas
+/[Aa]ssets/[Ss]creenshots/
+/[Aa]ssets/[Ss]creenshots.meta
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
