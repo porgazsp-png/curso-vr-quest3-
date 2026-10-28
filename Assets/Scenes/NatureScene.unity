@@ -27654,6 +27654,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1698489381}
     m_Modifications:
+    - target: {fileID: 346408928550930970, guid: 14d3eb5962b81f449953c82eea7a1bc7, type: 3}
+      propertyPath: m_FadeMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 346408928550930970, guid: 14d3eb5962b81f449953c82eea7a1bc7, type: 3}
+      propertyPath: m_AnimateCrossFading
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 625903420352598636, guid: 14d3eb5962b81f449953c82eea7a1bc7, type: 3}
       propertyPath: m_Controller
       value: 
@@ -27672,7 +27680,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4970983374157036898, guid: 14d3eb5962b81f449953c82eea7a1bc7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 4970983374157036898, guid: 14d3eb5962b81f449953c82eea7a1bc7, type: 3}
       propertyPath: m_LocalRotation.w
