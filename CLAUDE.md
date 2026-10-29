@@ -48,6 +48,9 @@ El autor está aprendiendo Unity y VR: explica lo que haces y por qué.
 | `Editor/ConstructorPotro` | Menú *VR Quest 3 > Crear potro de prácticas*: caballete de madera junto a la armería |
 | `IGolpeable` | Interfaz para lo que reacciona a un golpe (`RecibirGolpe(Golpe)`) |
 | `Editor/ConstructorArmas` | Menú *VR Quest 3 > Preparar armas*: puño, pivote, filo y agarre Toggle en los mandos |
+| `AguaQueFluye` | Desplaza la textura del agua para que el río corra (barato: agua opaca) |
+| `Editor/ConstructorCaminoCastillo` | Menú *VR Quest 3 > Castillo > 1. Camino, río y colina* |
+| `Editor/ConstructorCastilloExterior` | Menú *VR Quest 3 > Castillo > 2. Exterior del castillo* |
 | `RutinaAldeano` | El aldeano pasea por su zona (NavMeshAgent) y hace tareas animadas |
 | `Editor/ConstructorRutinas` | Menú *VR Quest 3 > Dar vida a los aldeanos*: NavMesh, Animators por oficio, rutinas |
 
@@ -88,6 +91,29 @@ El autor está aprendiendo Unity y VR: explica lo que haces y por qué.
 - Visual de la esfera del dedo (Poke Point/Pinch_Pointer_LOD0) desactivado: no hay UI que tocar.
 - Botones del simulador: G grip, T gatillo, 1 primario (A/X), 3 clic joystick (= Scale Toggle, no usar).
 - Key, Lid, Potion: dentro de `Phase2 Interactables` (cofre), **desactivados** → no se pueden coger ahora.
+
+**Castillo (rama `castillo`)** — plan acordado: exterior en NatureScene, interior en escena aparte "Castillo"
+unida con `Portal` / `PuntoDeAparicion` (NO existen todavía: hay que crearlos) y fundido a negro.
+Assets: solo Quaternius CC0 (no hay "castle kit": muralla y torres por script con sus texturas de piedra).
+- Fase 1 HECHA (pendiente de que la pruebe el autor): colina low poly (centro x0 z64, meseta a 6 m, radio 20),
+  camino de tierra (pueblo → puente en z 21,5–30,5 → sube por el este → puerta en z≈50), río este-oeste en z≈26
+  con muros invisibles en las orillas, puente de piedra en arco con pretiles, mojones, vallas, 3 faroles (luz Baked).
+  Wall0 (muro norte del pueblo) desactivado; "Environment/Limites ampliados" cierra la zona hasta z=99, x ±40.
+  Niebla 30–120 m, cámara a 130 m, "Suelo lejano" de 800 m para que no se vea el borde del mundo.
+  Probado en Play: el recorrido completo se anda sin atascos; pretiles y orillas no dejan caer al agua.
+  ~111 renderers, ~47k triángulos, 0 luces en tiempo real. Mallas y materiales en `Assets/Pueblo/Castillo/`.
+- Fase 2 EN CURSO — exterior HECHO ("Castillo (exterior)"): muralla 28x28 m (x ±14, z 50–78) con almenas,
+  4 torres redondas con tejado cónico, torre del homenaje (x ±5,5, z 62–73, 16 m), cuerpo de puerta con portón
+  de 2 hojas Door_8_Round (cada hoja cuelga de un objeto "bisagra" listo para girar; BoxCollider la cierra),
+  marco DoorFrame_Round_Brick, estandartes rojos, 2 antorchas con UNA luz Mixed + LuzParpadeante, saeteras.
+  Piedra/almenas/tejas = 3 mallas combinadas (~1k triángulos de obra). Se ve desde el pueblo. Probado: se llega
+  andando a la puerta y el portón cerrado no se atraviesa.
+  FALTA de la Fase 2: guardias (esperan descargas), abrir el portón con el gatillo (script Puerta) y Portal.
+- Los FBX de Quaternius traen GIRO (-90º X) y ESCALA (100) en la raíz: al colocarlos, COMPONER el giro
+  (miGiro * localRotation) y MULTIPLICAR la escala; sustituirlos los tumba o los encoge.
+- Descargas pendientes (las hace el autor desde el navegador): Modular Character Outfits – Fantasy,
+  Ultimate Modular Ruins, LowPoly Medieval Weapons → `Assets/ThirdParty/Quaternius/`.
+- Los materiales de Kenney Nature Kit (grass, dirt...) salen turquesa/rosa con esta iluminación: usar Quaternius.
 
 **Falta**
 - Probar armas en gafas y ajustar "Inclinación hoja" si en la Quest no se siente natural.
