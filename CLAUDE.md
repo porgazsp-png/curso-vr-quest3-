@@ -51,6 +51,11 @@ El autor está aprendiendo Unity y VR: explica lo que haces y por qué.
 | `AguaQueFluye` | Desplaza la textura del agua para que el río corra (barato: agua opaca) |
 | `Editor/ConstructorCaminoCastillo` | Menú *VR Quest 3 > Castillo > 1. Camino, río y colina* |
 | `Editor/ConstructorCastilloExterior` | Menú *VR Quest 3 > Castillo > 2. Exterior del castillo* |
+| `Puerta` | Puerta de 1 o más hojas: gatillo (T) apuntando o tocando la abre/cierra con giro suave; alcance, bloqueo, cierre automático, sonidos, eventos |
+| `Editor/ConstructorPuertaCastillo` | Menú *VR Quest 3 > Castillo > 3. Portón que se abre* (repetir si se rehace el menú 2) |
+| `MusicaAmbiente` | Música de fondo 2D con fundido cruzado según la zona; recuerda por dónde iba cada tema; `Forzar(clip)` para combate |
+| `ZonaMusical` | Caja invisible (sin collider) con su tema y prioridad |
+| `Editor/ConstructorMusica` | Menú *VR Quest 3 > Música por zonas*: importación Streaming/Vorbis + objeto "Musica" con zonas Camino y Castillo |
 | `RutinaAldeano` | El aldeano pasea por su zona (NavMeshAgent) y hace tareas animadas |
 | `Editor/ConstructorRutinas` | Menú *VR Quest 3 > Dar vida a los aldeanos*: NavMesh, Animators por oficio, rutinas |
 
@@ -108,7 +113,16 @@ Assets: solo Quaternius CC0 (no hay "castle kit": muralla y torres por script co
   marco DoorFrame_Round_Brick, estandartes rojos, 2 antorchas con UNA luz Mixed + LuzParpadeante, saeteras.
   Piedra/almenas/tejas = 3 mallas combinadas (~1k triángulos de obra). Se ve desde el pueblo. Probado: se llega
   andando a la puerta y el portón cerrado no se atraviesa.
-  FALTA de la Fase 2: guardias (esperan descargas), abrir el portón con el gatillo (script Puerta) y Portal.
+  Portón con `Puerta` (2026-11-02): se abre 95° hacia dentro (+Z) en 2 s con el gatillo, alcance 2,5 m.
+  Probado en Play con la T del simulador: abre de frente, cierra apuntando a una hoja abierta, a 6 m no hace nada.
+  Ojo pruebas por MCP: con Unity en segundo plano el simulador ignora el teclado (Game view sin foco).
+  Los avisos "Failed to get haptic capabilities of XRSimulatedController" salen solo con dar a Play (del XRI, no nuestros).
+  Música por zonas (2026-11-02), pistas CC0 de OpenGameArt en `Assets/ThirdParty/Musica/` (ver LICENCIAS.txt):
+  pueblo = The Old Tower Inn (loop, por defecto), camino z 22–46 = Exploration, castillo z 43–89 = A Legend Will Rise.
+  Probado en Play moviendo al jugador: cambia de tema en cada zona con fundido.
+  OJO pruebas por MCP: comprobar `Application.isPlaying` antes de mover al jugador; si Play se ha parado,
+  el movimiento se hace en la escena real (pasó: el XR Origin acabó en el castillo; restaurado a (0,0,-6)).
+  FALTA de la Fase 2: guardias (esperan descargas) y Portal + PuntoDeAparicion + escena "Castillo".
 - Los FBX de Quaternius traen GIRO (-90º X) y ESCALA (100) en la raíz: al colocarlos, COMPONER el giro
   (miGiro * localRotation) y MULTIPLICAR la escala; sustituirlos los tumba o los encoge.
 - Descargas pendientes (las hace el autor desde el navegador): Modular Character Outfits – Fantasy,
