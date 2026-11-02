@@ -53,6 +53,8 @@ El autor está aprendiendo Unity y VR: explica lo que haces y por qué.
 | `Editor/ConstructorCastilloExterior` | Menú *VR Quest 3 > Castillo > 2. Exterior del castillo* |
 | `Puerta` | Puerta de 1 o más hojas: gatillo (T) apuntando o tocando la abre/cierra con giro suave; alcance, bloqueo, cierre automático, sonidos, eventos |
 | `Editor/ConstructorPuertaCastillo` | Menú *VR Quest 3 > Castillo > 3. Portón que se abre* (repetir si se rehace el menú 2) |
+| `ConfortJugador` | En el XR Origin: velocidad (2 m/s), giro por pasos (45º), intensidad de la viñeta antimareo y rescate de altura |
+| `Editor/ConstructorControlesVR` | Menú *VR Quest 3 > Controles y confort VR*: Floor, CharacterController 1,8 m, sticks, viñeta, manos visibles |
 | `MusicaAmbiente` | Música de fondo 2D con fundido cruzado según la zona; recuerda por dónde iba cada tema; `Forzar(clip)` para combate |
 | `ZonaMusical` | Caja invisible (sin collider) con su tema y prioridad |
 | `Editor/ConstructorMusica` | Menú *VR Quest 3 > Música por zonas*: importación Streaming/Vorbis + objeto "Musica" con zonas Camino y Castillo |
@@ -76,6 +78,14 @@ El autor está aprendiendo Unity y VR: explica lo que haces y por qué.
   en `Aldeanos` (Herrero, 2 Arqueros, Leñador, 3 aldeanos) que caminan en Play sin errores.
   Los de "Galeria de pruebas (Fase 1)" siguen en escena.
 - **Ojo licencia**: usa animaciones de Mixamo (`Assets/ThirdParty/Mixamo/`), que NO son CC0 (regla del proyecto).
+
+**Controles y confort (rama `controles-vr`, 2026-11-02)** — `ConstructorControlesVR` ya ejecutado:
+- Tracking Origin = Floor (antes NotSpecified). En el editor con simulador sale "Unknown" y usa el Camera Y Offset 1,36.
+- Stick izq = Move 2 m/s (diagonal probada: 47º); stick der = Snap Turn 45º / media vuelta atrás / teleport delante.
+  ContinuousTurnProvider desactivado. TunnelingVignette bajo la Main Camera (andar, girar, teleport).
+- Manos: AlwaysAnimate + Update When Offscreen. Controller Visual siguen apagados a propósito (se usan manos).
+- La build antigua (commit 63e103c) solo tenía SampleScene: ahora NatureScene es la única activa.
+- Pendiente: probar en gafas; hand tracking (paquete XR Hands) propuesto, no instalado.
 
 **Agarrar y armas**
 - Agarre de un toque: Near-Far Interactor en modo `Toggle` (grip coge, grip otra vez suelta).

@@ -1,0 +1,5 @@
+C:/Users/pym_I/Documents/GitHub/curso-vr-quest3-/.utmp/RelWithDebInfo/565s1a65/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/pym_I/Documents/GitHub/curso-vr-quest3-/.utmp/RelWithDebInfo/565s1a65/arm64-v8a/CMakeFiles/rebuild_cache.dir
+C:/Users/pym_I/Documents/GitHub/curso-vr-quest3-/.utmp/RelWithDebInfo/565s1a65/arm64-v8a/GameActivity/CMakeFiles/game.dir
+C:/Users/pym_I/Documents/GitHub/curso-vr-quest3-/.utmp/RelWithDebInfo/565s1a65/arm64-v8a/GameActivity/CMakeFiles/edit_cache.dir
+C:/Users/pym_I/Documents/GitHub/curso-vr-quest3-/.utmp/RelWithDebInfo/565s1a65/arm64-v8a/GameActivity/CMakeFiles/rebuild_cache.dir
