@@ -150,6 +150,20 @@ Assets: solo Quaternius CC0 (no hay "castle kit": muralla y torres por script co
   Ultimate Modular Ruins, LowPoly Medieval Weapons → `Assets/ThirdParty/Quaternius/`.
 - Los materiales de Kenney Nature Kit (grass, dirt...) salen turquesa/rosa con esta iluminación: usar Quaternius.
 
+**PRÓXIMO: mejora gráfica (decidido 2026-11-04, antes de seguir con el castillo)** — en rama nueva `graficos`
+- Aldeanos (`Aldeanos`) y animales (`Galeria de pruebas (Fase 1)`) DESACTIVADOS en la escena (no borrados).
+  La viñeta antimareo también quitada (ConfortJugador > Usar Viñeta = false). Probado en gafas: no marea.
+- Packs elegidos (los descarga el autor, todos CC0):
+  - Medieval Village MegaKit (Quaternius) → pueblo (y luego castillo) — `Assets/ThirdParty/Quaternius/`
+  - Stylized Nature MegaKit (Quaternius) → bosque — `Assets/ThirdParty/Quaternius/`
+  - KayKit Adventurers + KayKit Animations → personajillos adorables del pueblo — `Assets/ThirdParty/KayKit/`
+  - Opcional: Universal Animation Library (Quaternius) → sustituir Mixamo (licencia)
+- Orden: 1) bosque (script `ConstructorBosque` con menú: árboles nuevos, densidad, flores/rocas, LODs,
+  GPU instancing, estático; lo viejo de Kenney se desactiva), 2) pueblo, 3) personajillos (probar 1–2 antes
+  por si el estilo chibi de KayKit no casa), 4) luz horneada. Medir FPS en gafas (72) en cada paso.
+- Opciones descartadas: Poly Haven (realista/pesado para Quest), KayKit Medieval Builder (muy juguete),
+  Kenney characters (poco adorables).
+
 **Falta**
 - Probar armas en gafas y ajustar "Inclinación hoja" si en la Quest no se siente natural.
 - Sonidos de tajo y de golpe en madera (los scripts ya tienen los huecos).
