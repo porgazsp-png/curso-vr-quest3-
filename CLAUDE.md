@@ -85,7 +85,18 @@ El autor está aprendiendo Unity y VR: explica lo que haces y por qué.
   ContinuousTurnProvider desactivado. TunnelingVignette bajo la Main Camera (andar, girar, teleport).
 - Manos: AlwaysAnimate + Update When Offscreen. Controller Visual siguen apagados a propósito (se usan manos).
 - La build antigua (commit 63e103c) solo tenía SampleScene: ahora NatureScene es la única activa.
-- Pendiente: probar en gafas; hand tracking (paquete XR Hands) propuesto, no instalado.
+- Probado en gafas: altura OK (de pie, empieza en la herrería). PERO al andar marea.
+- Foveated Rendering: código escrito (ConfortJugador "Nivel Foveated" 0,66 + el menú marca la casilla OpenXR Android)
+  pero SIN COMPILAR NI EJECUTAR (Unity se cerró). Falta: compilar, ejecutar el menú, Ctrl+S, build, medir FPS (OVR Metrics Tool).
+- Pendiente: hand tracking (paquete XR Hands) propuesto, no instalado.
+- **Cabeza que no gira en la Quest (2026-11-04)**: el "XR Interaction Simulator" estaba ACTIVO en la escena; su
+  SimulatedDeviceLifecycleManager (Remove Other HMD Devices) borra las gafas reales al encenderse → cabeza a 0 m,
+  no gira, el mundo "va contigo" (el log de la Quest decía "La cabeza estaba a 0,00 m"). Arreglo: simulador
+  DESACTIVADO en la escena (lo enciende SelectorDeModo solo en PC sin gafas) y desmarcado "instanciar simulador
+  automáticamente" en XRDeviceSimulatorSettings. Falta confirmarlo con build nueva en las gafas.
+- Andar: "Dirección al andar" en ConfortJugador (Mando por defecto, o Cabeza).
+- En la build de la Quest sale "Failed to create agent because there is no valid NavMesh" (aldeanos): pendiente.
+- Log de la Quest: adb en Unity/Hub/Editor/6000.2.6f2/.../platform-tools; `adb logcat` y buscar "Unity".
 
 **Agarrar y armas**
 - Agarre de un toque: Near-Far Interactor en modo `Toggle` (grip coge, grip otra vez suelta).

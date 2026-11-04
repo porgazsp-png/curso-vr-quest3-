@@ -1,6 +1,8 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.XR.CoreUtils;
 using UnityEngine;
+using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion.Comfort;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion.Movement;
 using UnityEngine.XR.Interaction.Toolkit.Locomotion.Turning;
@@ -9,11 +11,16 @@ using UnityEngine.XR.Interaction.Toolkit.Locomotion.Turning;
 /// Panel de confort del jugador: todo lo que marea (o no) en un solo sitio del Inspector.
 ///
 ///  - Velocidad al andar con el stick izquierdo (Continuous Move Provider).
+///  - Dirección al andar: hacia donde apunta el mando izquierdo (por defecto) o hacia donde miras.
+///    Con "Mando" puedes girar la cabeza libremente sin que el rumbo cambie.
 ///  - Grados de cada giro con el stick derecho (Snap Turn) y si se puede dar media vuelta tirando hacia atrás.
 ///  - Viñeta antimareo (Tunneling Vignette del XRI): oscurece los bordes de la vista mientras te
 ///    mueves o giras con el stick. Tu cerebro ve menos movimiento "periférico" y se marea menos.
 ///  - Rescate de altura: si al arrancar la cabeza sale casi a ras de suelo (las gafas no han
 ///    detectado el suelo), sube la cámara a una altura por defecto y avisa en la Console.
+///  - Foveated Rendering: la Quest dibuja los bordes de la vista con menos detalle (el ojo casi no
+///    lo nota porque miras al centro) y así gana FPS. Los bajones de FPS marean mucho en VR.
+///    Necesita la casilla "Foveated Rendering" de OpenXR (Android) activada; el menú la activa.
 ///
 /// Cómo funciona: no mueve nada por sí mismo; al empezar (y cada vez que cambias un valor en Play)
 /// copia estos valores a los componentes del XRI que hay dentro del XR Origin.
@@ -27,6 +34,16 @@ public class ConfortJugador : MonoBehaviour
     [Header("Movimiento (stick izquierdo)")]
     [Tooltip("Metros por segundo al andar. 2 es un paso tranquilo; más de 3 marea a mucha gente.")]
     [SerializeField, Range(0.5f, 5f)] private float velocidadMovimiento = 2f;
+
+    public enum DireccionAndar { Mando, Cabeza }
+
+    [Tooltip("Hacia dónde se anda al empujar el stick hacia delante.\n" +
+             "Mando: hacia donde apunta el mando izquierdo; puedes mirar a los lados (o atrás) mientras andas recto. Marea menos.\n" +
+             "Cabeza: hacia donde miras; cada giro de cabeza cambia el rumbo.")]
+    [SerializeField] private DireccionAndar direccionAndar = DireccionAndar.Mando;
+
+    [Tooltip("El mando que marca la dirección (si se deja vacío se busca uno llamado \"Left Controller\" dentro del XR Origin).")]
+    [SerializeField] private Transform mandoIzquierdo;
 
     [Header("Giro (stick derecho)")]
     [Tooltip("Grados de cada giro a izquierda o derecha. 30–45 es lo habitual.")]
@@ -52,6 +69,10 @@ public class ConfortJugador : MonoBehaviour
     [Tooltip("Altura de los ojos que se pone en ese caso (metros).")]
     [SerializeField, Range(1f, 2f)] private float alturaRescate = 1.65f;
 
+    [Header("Rendimiento (más FPS = menos mareo)")]
+    [Tooltip("Foveated Rendering: 0 = apagado, 1 = bordes con el mínimo detalle. ~0,66 (medio) apenas se nota en Quest 3.")]
+    [SerializeField, Range(0f, 1f)] private float nivelFoveated = 0.66f;
+
     private XROrigin origen;
     private ContinuousMoveProvider mover;
     private SnapTurnProvider girar;
@@ -69,20 +90,45 @@ public class ConfortJugador : MonoBehaviour
     {
         Aplicar();
 
+        // Las gafas tardan un poco en arrancar: el foveated se pide cuando ya hay "pantalla" XR
+        yield return null;
+        AplicarFoveated();
+
         // Rescate de altura: damos un par de segundos a que el seguimiento arranque
         yield return new WaitForSeconds(2f);
         ComprobarAltura();
     }
 
+    private void AplicarFoveated()
+    {
+        var pantallas = new List<XRDisplaySubsystem>();
+        SubsystemManager.GetSubsystems(pantallas);
+        foreach (var p in pantallas)
+        {
+            if (!p.running) continue;
+            p.foveatedRenderingLevel = nivelFoveated;
+            p.foveatedRenderingFlags = XRDisplaySubsystem.FoveatedRenderingFlags.None;   // Quest 3 no sigue los ojos: centro fijo
+        }
+        // Sin gafas (editor con simulador) no hay pantalla XR: no pasa nada, no hay que avisar
+    }
+
     private void OnValidate()
     {
-        if (Application.isPlaying && origen != null) Aplicar();
+        if (Application.isPlaying && origen != null)
+        {
+            Aplicar();
+            AplicarFoveated();
+        }
     }
 
     /// <summary>Copia los valores del Inspector a los componentes del XRI.</summary>
     public void Aplicar()
     {
-        if (mover != null) mover.moveSpeed = velocidadMovimiento;
+        if (mover != null)
+        {
+            mover.moveSpeed = velocidadMovimiento;
+            mover.forwardSource = ElegirReferenciaAndar();
+        }
         else Debug.LogWarning("[ConfortJugador] No encuentro el Continuous/Dynamic Move Provider dentro del XR Origin.", this);
 
         if (girar != null)
@@ -103,6 +149,24 @@ public class ConfortJugador : MonoBehaviour
         }
         else if (usarVineta)
             Debug.LogWarning("[ConfortJugador] No hay TunnelingVignette bajo la cámara. Ejecuta VR Quest 3 > Controles y confort VR.", this);
+    }
+
+    /// <summary>Devuelve el objeto cuyo "delante" marca hacia dónde se anda (mando o cabeza).</summary>
+    private Transform ElegirReferenciaAndar()
+    {
+        Transform cabeza = origen.Camera != null ? origen.Camera.transform : null;
+        if (direccionAndar == DireccionAndar.Cabeza) return cabeza;
+
+        if (mandoIzquierdo == null)
+        {
+            foreach (var t in GetComponentsInChildren<Transform>(true))
+                if (t.name == "Left Controller") { mandoIzquierdo = t; break; }
+        }
+        if (mandoIzquierdo != null) return mandoIzquierdo;
+
+        Debug.LogWarning("[ConfortJugador] No encuentro el mando izquierdo (\"Left Controller\"): se anda hacia donde mira la cabeza. " +
+                         "Arrástralo al campo \"Mando Izquierdo\".", this);
+        return cabeza;
     }
 
     private void ComprobarAltura()

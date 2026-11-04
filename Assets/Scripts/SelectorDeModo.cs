@@ -13,6 +13,13 @@ using UnityEngine.XR.Management;
 /// 2. Añádele este script.
 /// 3. Arrastra el objeto "XR Interaction Simulator" de la Hierarchy al campo "Simulador".
 /// 4. Elige el modo en el Inspector.
+///
+/// MUY IMPORTANTE: el objeto "XR Interaction Simulator" debe estar DESACTIVADO en la escena.
+/// Este script lo enciende él solo cuando hace falta (en el PC sin gafas).
+/// Motivo: su componente SimulatedDeviceLifecycleManager, nada más encenderse, BORRA las gafas de verdad
+/// del sistema de input ("Remove Other HMD Devices") y no las devuelve al apagarse. En la Quest eso deja
+/// la cámara sin datos: cabeza a 0 m, no gira y el mundo "se viene contigo". Se enciende antes que
+/// cualquier script nuestro, así que apagarlo después ya no sirve: tiene que empezar apagado.
 /// </summary>
 public class SelectorDeModo : MonoBehaviour
 {
@@ -31,6 +38,15 @@ public class SelectorDeModo : MonoBehaviour
 
     // Solo lectura: para ver en el Inspector qué modo se ha elegido al final
     [SerializeField] private bool usandoSimulador;
+
+    private void Awake()
+    {
+        // Si alguien lo deja encendido en la escena, avisar: con gafas reales romperá el seguimiento de la cabeza
+        if (simulador != null && simulador.activeSelf)
+            Debug.LogError("[SelectorDeModo] El \"XR Interaction Simulator\" está ACTIVO en la escena. Desactívalo " +
+                           "(casilla junto al nombre en el Inspector): si empieza encendido borra las gafas reales " +
+                           "y en la Quest la cabeza no gira. Este script ya lo enciende solo cuando hace falta.", simulador);
+    }
 
     private IEnumerator Start()
     {

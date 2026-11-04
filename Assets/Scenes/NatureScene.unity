@@ -36288,13 +36288,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConfortJugador
   velocidadMovimiento: 2
+  direccionAndar: 0
+  mandoIzquierdo: {fileID: 0}
   gradosGiro: 45
   mediaVuelta: 1
-  usarVineta: 1
+  usarVineta: 0
   intensidadVineta: 0.5
   suavidadBorde: 0.25
   alturaMinimaCabeza: 0.5
   alturaRescate: 1.65
+  nivelFoveated: 0.66
 --- !u!1001 &996067270
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -57928,7 +57931,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1698489381
 Transform:
   m_ObjectHideFlags: 0
@@ -67938,7 +67941,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2013673958
 Transform:
   m_ObjectHideFlags: 0
@@ -72647,6 +72650,10 @@ PrefabInstance:
     - target: {fileID: 8135023674665499069, guid: 58d0a4ac86f2348deb02f3880c71378e, type: 3}
       propertyPath: m_Name
       value: XR Interaction Simulator
+      objectReference: {fileID: 0}
+    - target: {fileID: 8135023674665499069, guid: 58d0a4ac86f2348deb02f3880c71378e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8518324294302271954, guid: 58d0a4ac86f2348deb02f3880c71378e, type: 3}
       propertyPath: m_LocalPosition.x

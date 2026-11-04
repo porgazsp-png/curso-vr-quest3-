@@ -119,6 +119,19 @@ public static class ConstructorControlesVR
             informe.Add($"Viñeta conectada a {lista.Count} formas de moverse (andar, girar, teletransporte)");
         }
 
+        // Foveated Rendering en OpenXR para Android (el nivel lo pone ConfortJugador al arrancar)
+        var openxr = UnityEngine.XR.OpenXR.OpenXRSettings.GetSettingsForBuildTargetGroup(BuildTargetGroup.Android);
+        var foveated = openxr != null ? openxr.GetFeature<UnityEngine.XR.OpenXR.Features.FoveatedRenderingFeature>() : null;
+        if (foveated == null)
+            Debug.LogWarning("[ConstructorControlesVR] No encuentro la función Foveated Rendering de OpenXR para Android.");
+        else if (!foveated.enabled)
+        {
+            Undo.RecordObject(foveated, "Controles VR");
+            foveated.enabled = true;
+            EditorUtility.SetDirty(foveated);
+            informe.Add("OpenXR (Android): Foveated Rendering activado");
+        }
+
         if (origen.GetComponent<ConfortJugador>() == null)
         {
             Undo.AddComponent<ConfortJugador>(origen.gameObject);
